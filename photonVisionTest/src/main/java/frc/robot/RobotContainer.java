@@ -7,6 +7,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import org.photonvision.PhotonVersion;
+import org.photonvision.proto.Photon;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -24,6 +25,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.PhotonVision;
 // import frc.robot.subsystems.Simulation;
+import frc.robot.subsystems.PhotonVisionVersoin2;
 
 public class RobotContainer {
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -43,8 +45,9 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
    // public final PhotonVision blackCamera = new PhotonVision("testCamera1", drivetrain, Constants.PhotonVisionConst.blackCameraOffset); 
-    public final PhotonVision orangeCamera  = new PhotonVision("orangeCamera", drivetrain, Constants.PhotonVisionConst.orangeCameraOffset);
-    public final PhotonVision blueCamera = new PhotonVision("blueCamera", drivetrain, Constants.PhotonVisionConst.blueCameraOffset);
+    // public final PhotonVision orangeCamera  = new PhotonVision("orangeCamera", drivetrain, Constants.PhotonVisionConst.orangeCameraOffset);
+    // public final PhotonVision blueCamera = new PhotonVision("blueCamera", drivetrain, Constants.PhotonVisionConst.blueCameraOffset);
+    public final PhotonVisionVersoin2 orangeCameraV2 = new PhotonVisionVersoin2("orangeCamera", drivetrain, Constants.PhotonVisionConst.orangeCameraOffset); 
     // public final Simulation sim = new Simulation(drivetrain); 
 
     public RobotContainer() {

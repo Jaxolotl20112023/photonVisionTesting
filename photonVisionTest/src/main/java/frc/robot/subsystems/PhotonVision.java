@@ -12,6 +12,8 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -20,6 +22,8 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -105,7 +109,7 @@ public class PhotonVision extends SubsystemBase {
 
         
 
-            // calc the 2d pose of the robot using the field loaded and the of the tag
+            // get the relative position of the tag in the field
             Pose2d tagFieldRelativePose = (Constants.PhotonVisionConst.field_layout).getTagPose(tagID).get().toPose2d();
         
             SmartDashboard.putNumber("Current Seen Tag Field X", tagFieldRelativePose.getX());
@@ -122,8 +126,17 @@ public class PhotonVision extends SubsystemBase {
                 new Transform2d(cameraToRobot.getTranslation().toTranslation2d(), cameraToRobot.getRotation().toRotation2d()));
 
             if(poseEstimator.estimateCoprocMultiTagPose(currentResult.get()).isPresent()) {
+                SmartDashboard.putBoolean("Did vision calculate?", true);
+
                 estimatedRobotPoseField = poseEstimator.estimateCoprocMultiTagPose(currentResult.get()).get();
                 
+                double distanceToTarget = PhotonUtils.getDistanceToPose(estimatedRobotPoseRelative, tagFieldRelativePose); 
+
+                drivetrain.setVisionMeasurementStdDevs(calculateStdDevs(distanceToTarget));
+                drivetrain.addVisionMeasurement(estimatedRobotPoseRelative, 
+                    estimatedRobotPoseField.timestampSeconds, 
+                    calculateStdDevs(distanceToTarget));
+
                 drivetrain.addVisionMeasurement(estimatedRobotPoseRelative, Timer.getFPGATimestamp()); 
                 m_Field.setRobotPose(drivetrain.getState().Pose);
             }
@@ -131,14 +144,24 @@ public class PhotonVision extends SubsystemBase {
             
         }
 
-        drivetrain.getModuleLocations(); 
-        
+        SmartDashboard.putBoolean("Did vision calculate?", false);        
 
         setSmartDashboard();
 
         
     }
 
+    public Matrix<N3,N1> calculateStdDevs(double distance) {
+        
+        double baseStdDevTranslation = 0.05; // in meters
+        double baseStdDevRotation = 0.1; // about 5.7 degrees
+
+        double calculateStdDevsTrans = baseStdDevTranslation + (0.24 * Math.pow(distance,2)); 
+        double calculateStdDevsRot = baseStdDevRotation + (0.43 * Math.pow(distance, 2)); 
+        
+        return VecBuilder.fill(calculateStdDevsTrans, calculateStdDevsTrans, calculateStdDevsRot); 
+    }
+ 
     private void setSmartDashboard() {
 
         SmartDashboard.putData("Field", m_Field);
