@@ -26,6 +26,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.PhotonVision;
 // import frc.robot.subsystems.Simulation;
 import frc.robot.subsystems.PhotonVisionVersoin2;
+import frc.robot.subsystems.Simulation;
 
 public class RobotContainer {
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -48,7 +49,8 @@ public class RobotContainer {
     // public final PhotonVision orangeCamera  = new PhotonVision("orangeCamera", drivetrain, Constants.PhotonVisionConst.orangeCameraOffset);
     // public final PhotonVision blueCamera = new PhotonVision("blueCamera", drivetrain, Constants.PhotonVisionConst.blueCameraOffset);
     public final PhotonVisionVersoin2 orangeCameraV2 = new PhotonVisionVersoin2("orangeCamera", drivetrain, Constants.PhotonVisionConst.orangeCameraOffset); 
-    // public final Simulation sim = new Simulation(drivetrain); 
+    public final Simulation sim = new Simulation(drivetrain); 
+
 
     public RobotContainer() {
         configureBindings();

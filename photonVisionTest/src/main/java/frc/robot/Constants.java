@@ -61,6 +61,8 @@ public final class Constants {
     public static final Translation2d m_back_left = new Translation2d(Units.inchesToMeters(-14.5),Units.inchesToMeters(14.5));
     public static final Translation2d m_back_right = new Translation2d(Units.inchesToMeters(-14.5),Units.inchesToMeters(-14.5));
 
+    public static final int pigeon_id = 0; 
+
     public static final double kP = 0;
     public static final double kI = 0; 
     public static final double kD = 0; 
