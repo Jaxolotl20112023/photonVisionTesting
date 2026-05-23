@@ -138,7 +138,7 @@ public class PhotonVisionVersoin2 extends SubsystemBase {
 
                 drivetrain.addVisionMeasurement(estimatedRobotPoseRelative, Timer.getFPGATimestamp()); 
 
-                m_Field.setRobotPose(drivetrain.getState().Pose);
+                m_Field.setRobotPose(drivetrain.getState().Pose); // sets up the simulation field 
             }
 
             // setSmartDashboard();
@@ -155,6 +155,10 @@ public class PhotonVisionVersoin2 extends SubsystemBase {
         double calculateStdDevsRot = baseStdDevRotation + (0.43 * Math.pow(distance, 2)); 
         
         return VecBuilder.fill(calculateStdDevsTrans, calculateStdDevsTrans, calculateStdDevsRot); 
+    }
+
+    public Pose2d get_robot_pose() { 
+        return drivetrain.getState().Pose; 
     }
  
     private void setSmartDashboard() {
