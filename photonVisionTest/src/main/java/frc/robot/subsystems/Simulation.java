@@ -41,7 +41,8 @@ public class Simulation extends SubsystemBase {
         m_odometry = new SwerveDriveOdometry(
             m_kinematics, 
             m_pigeon.getRotation2d(), 
-            swerve_properties.createModulePositions());
+            swerve_properties.createModulePositions()
+        );
 
 
         m_Field = new Field2d(); 
@@ -50,7 +51,8 @@ public class Simulation extends SubsystemBase {
 
     @Override
     public void periodic() {
-        m_Field.setRobotPose(m_odometry.getPoseMeters());
+        m_odometry.update(m_pigeon.getRotation2d(), swerve_properties.createModulePositions()); 
+        m_Field.setRobotPose(get_robot_pose());
     }
 
     public Pose2d get_robot_pose() {
