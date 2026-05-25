@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -50,5 +51,9 @@ public class Simulation extends SubsystemBase {
     @Override
     public void periodic() {
         m_Field.setRobotPose(m_odometry.getPoseMeters());
+    }
+
+    public Pose2d get_robot_pose() {
+        return m_odometry.getPoseMeters(); 
     }
 }

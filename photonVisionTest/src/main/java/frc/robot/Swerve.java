@@ -25,7 +25,7 @@ public class Swerve {
 
 
     private double wheel_radius = TunerConstants.FrontLeft.WheelRadius; 
-                    // get the circumference of the wheel / divides by the gear ratio / 2048 counts/encoder readings per rotation
+                    // get the circumference of the wheel / divides by the gear ratio / 2048 counts or encoder readings per rotation
     private double conversion_factor = (2*wheel_radius*Math.PI) / TunerConstants.FrontLeft.CouplingGearRatio / 2048;
     
     public Swerve() { 

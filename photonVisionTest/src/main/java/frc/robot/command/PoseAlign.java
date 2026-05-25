@@ -4,6 +4,8 @@ package frc.robot.command;
 
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
+import java.util.Optional;
+
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 
@@ -13,6 +15,8 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
@@ -40,6 +44,8 @@ public class PoseAlign extends Command{
             .withRotationalDeadband(MaxAngularRate * deadband) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
+    private final Optional<Alliance> ally; 
+
     private double robot_hub_angle;
     private double x_input; 
     private double y_input; 
@@ -52,6 +58,7 @@ public class PoseAlign extends Command{
         this.drivetrain = drivetrain;
         this.driver0 = driver0; 
 
+        ally = DriverStation.getAlliance(); 
         robotPose = drivetrain.getStateCopy().Pose;
         robotRotation = robotPose.getRotation();
 
@@ -75,6 +82,7 @@ public class PoseAlign extends Command{
     @Override
     public void execute() {
 
+        robotPose = drivetrain.getStateCopy().Pose; 
         robot_hub_angle = get_angle_robot_hub();
 
         x_input = -driver0.getLeftX();
@@ -95,7 +103,7 @@ public class PoseAlign extends Command{
         double x_distance = robotPose.getX() - hubPose.getX(); 
         double y_distance = robotPose.getY() - hubPose.getY(); 
 
-        return Math.atan(y_distance/x_distance); 
+        return ally.get() == Alliance.Red ? Math.atan(y_distance/x_distance) : Math.atan(x_distance/y_distance); 
     }
 
     public void set_swerve_speeds() {
